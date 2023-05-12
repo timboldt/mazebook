@@ -2,9 +2,11 @@ package maze
 
 import (
 	"fmt"
+	"image"
 	"math/rand"
 
 	"github.com/dominikbraun/graph"
+	"github.com/fogleman/gg"
 )
 
 type RectangularMaze struct {
@@ -79,6 +81,41 @@ func (m *RectangularMaze) Print() {
 		fmt.Println(body)
 		fmt.Println(bottom)
 	}
+}
+
+func (m *RectangularMaze) ToImage() image.Image {
+	const cellSize = 20
+	dc := gg.NewContext(m.cols*cellSize, m.rows*cellSize)
+
+	// Set background.
+	dc.SetRGBA(1, 1, 1, 1)
+	dc.DrawRectangle(0, 0, float64(dc.Width()), float64(dc.Height()))
+	dc.Fill()
+
+	dc.SetRGBA(0, 0, 0, 1)
+	dc.SetLineCap(gg.LineCapRound)
+	dc.SetLineWidth(5)
+
+	dc.DrawLine(0, 0, float64(dc.Width()), 0)
+	dc.Stroke()
+
+	dc.DrawLine(0, 0, 0, float64(dc.Height()))
+	dc.Stroke()
+
+	for r := 0; r < m.rows; r++ {
+		for c := 0; c < m.cols; c++ {
+			if _, err := m.g.Edge(CellHash(Cell{row: r, col: c}), CellHash(Cell{row: r, col: c + 1})); err != nil {
+				dc.DrawLine(float64((c+1)*cellSize), float64(r*cellSize)+1, float64((c+1)*cellSize), float64((r+1)*cellSize)-1)
+				dc.Stroke()
+			}
+			if _, err := m.g.Edge(CellHash(Cell{row: r, col: c}), CellHash(Cell{row: r + 1, col: c})); err != nil {
+				dc.DrawLine(float64(c*cellSize)+1, float64((r+1)*cellSize), float64((c+1)*cellSize)-1, float64((r+1)*cellSize))
+				dc.Stroke()
+			}
+		}
+	}
+
+	return dc.Image()
 }
 
 func (m *RectangularMaze) ApplyBinaryTree() {

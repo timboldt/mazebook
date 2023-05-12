@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	m := maze.NewRectangularMaze(5, 10)
+	m := maze.NewRectangularMaze(15, 30)
 	fmt.Printf("%+v\n", m)
 	m.ApplyBinaryTree()
 	fmt.Printf("%+v\n", m)

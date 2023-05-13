@@ -11,21 +11,21 @@ import (
 func main() {
 	var m *rectangular.Maze
 
-	fmt.Println("Binary Tree")
+	// fmt.Println("Binary Tree")
+	// m = rectangular.NewMaze(50, 30)
+	// m.ApplyBinaryTree()
+	// m.FindBestExitPoint()
+	// m.Print()
+	// f, _ := os.Create("image_binarytree.png")
+	// png.Encode(f, m.ToImage())
+
+	fmt.Println("Sidewinder")
 	m = rectangular.NewMaze(50, 30)
-	m.ApplyBinaryTree()
+	m.ApplySideWinder()
 	m.FindBestExitPoint()
 	m.Print()
-	f, _ := os.Create("image_binarytree.png")
+	f, _ := os.Create("image_sidewinder.png")
 	png.Encode(f, m.ToImage())
-
-	// fmt.Println("Sidewinder")
-	// m = rectangular.NewMaze(50, 30)
-	// m.ApplySideWinder()
-	// m.FindBestExitPoint()
-	//m.Print()
-	// f, _ = os.Create("image_sidewinder.png")
-	// png.Encode(f, m.ToImage())
 
 	// fmt.Println("Aldous-Broder")
 	// m = rectangular.NewMaze(50, 30)

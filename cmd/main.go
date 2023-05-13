@@ -8,15 +8,15 @@ import (
 )
 
 func main() {
-	m1 := maze.NewRectangularMaze(15, 30)
-	m1.ApplyBinaryTree()
-	//m1.Print()
-	f, _ := os.Create("image1.png")
-	png.Encode(f, m1.ToImage())
+	m := maze.NewRectangularMaze(15, 30)
+	m.ApplyBinaryTree()
+	m.FindBestExitPoint()
+	f, _ := os.Create("image_binarytree.png")
+	png.Encode(f, m.ToImage())
 
-	m2 := maze.NewRectangularMaze(15, 30)
-	m2.ApplySideWinder()
-	//m2.Print()
-	f, _ = os.Create("image2.png")
-	png.Encode(f, m2.ToImage())
+	m = maze.NewRectangularMaze(15, 30)
+	m.ApplySideWinder()
+	m.FindBestExitPoint()
+	f, _ = os.Create("image_sidewinder.png")
+	png.Encode(f, m.ToImage())
 }

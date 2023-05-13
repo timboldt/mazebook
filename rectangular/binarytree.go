@@ -22,14 +22,14 @@ func (m *Maze) ApplyBinaryTree() {
 			case 0:
 				// Link to next row.
 				m.g.AddEdge(
-					CellHash(Cell{row: r, col: c}),
-					CellHash(Cell{row: r + 1, col: c}),
+					CellHash(cell{row: r, col: c}),
+					CellHash(cell{row: r + 1, col: c}),
 				)
 			case 1:
 				// Link to next column.
 				m.g.AddEdge(
-					CellHash(Cell{row: r, col: c}),
-					CellHash(Cell{row: r, col: c + 1}),
+					CellHash(cell{row: r, col: c}),
+					CellHash(cell{row: r, col: c + 1}),
 				)
 			}
 		}

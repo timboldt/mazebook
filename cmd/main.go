@@ -29,6 +29,7 @@ func main() {
 	m = rectangular.NewMaze(50, 30)
 	m.ApplyAldousBroder()
 	m.FindBestExitPoint()
+	m.Print()
 	f, _ := os.Create("image_aldousbroder.png")
 	png.Encode(f, m.ToImage())
 }

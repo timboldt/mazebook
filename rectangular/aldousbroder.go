@@ -17,8 +17,8 @@ func (m *Maze) visited(r, c int) bool {
 		case 3:
 			nr, nc = r, c-1
 		}
-		src := CellHash(Cell{row: r, col: c})
-		dest := CellHash(Cell{row: nr, col: nc})
+		src := CellHash(cell{row: r, col: c})
+		dest := CellHash(cell{row: nr, col: nc})
 		// _, err := m.g.Edge(src, dest)
 		// fmt.Printf("%d - %d: %v\n", src, dest, err)
 		if _, err := m.g.Edge(src, dest); err == nil {
@@ -50,8 +50,8 @@ func (m *Maze) ApplyAldousBroder() {
 		if nr >= 0 && nr < m.rows && nc >= 0 && nc < m.cols {
 			//fmt.Printf("(%d,%d): %v\n", nr, nc, m.visited(nr, nc))
 			if !m.visited(nr, nc) {
-				src := CellHash(Cell{row: r, col: c})
-				dest := CellHash(Cell{row: nr, col: nc})
+				src := CellHash(cell{row: r, col: c})
+				dest := CellHash(cell{row: nr, col: nc})
 				m.g.AddEdge(src, dest)
 				unvisited--
 			}

@@ -71,8 +71,13 @@ func NewMaze(rows, cols int) *Maze {
 	return m
 }
 
-func (m *Maze) GetCell(row, col int) (cell, error) {
-	return m.g.Vertex(Cell(row, col).Hash())
+func (m *Maze) IsValidCell(c cell) bool {
+	_, err := m.g.Vertex(c.Hash())
+	return err == nil
+}
+
+func (m *Maze) Connect(src, dst cell) {
+	m.g.AddEdge(src.Hash(), dst.Hash())
 }
 
 func (m *Maze) IsConnected(src, dst cell) bool {

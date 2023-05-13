@@ -1,10 +1,9 @@
-package maze
+package rectangular
 
 import (
 	"fmt"
 	"image"
 	"log"
-	"math/rand"
 
 	"github.com/dominikbraun/graph"
 	"github.com/fogleman/gg"
@@ -12,7 +11,7 @@ import (
 	"golang.org/x/image/font/gofont/goregular"
 )
 
-type RectangularMaze struct {
+type Maze struct {
 	name string
 
 	rows int
@@ -32,8 +31,8 @@ func CellHash(c Cell) int {
 	return c.row*1e6 + c.col
 }
 
-func NewRectangularMaze(rows, cols int) *RectangularMaze {
-	m := &RectangularMaze{
+func NewMaze(rows, cols int) *Maze {
+	m := &Maze{
 		rows:  rows,
 		cols:  cols,
 		start: Cell{row: rows / 2, col: cols / 2},
@@ -48,21 +47,11 @@ func NewRectangularMaze(rows, cols int) *RectangularMaze {
 	return m
 }
 
-func (m *RectangularMaze) GetCell(row, col int) (Cell, error) {
+func (m *Maze) GetCell(row, col int) (Cell, error) {
 	return m.g.Vertex(CellHash(Cell{row: row, col: col}))
 }
 
-func (m *RectangularMaze) String() string {
-	return fmt.Sprintf("RectMaze[%d, %d]: %+v", m.rows, m.cols, m.g)
-}
-
-// func (m *RectangularMaze) DrawSVG() {
-// 	file, _ := os.Create("./mygraph.gv")
-// 	defer file.Close()
-// 	_ = draw.DOT(m.g, file)
-// }
-
-func (m *RectangularMaze) Print() {
+func (m *Maze) Print() {
 	fmt.Print("+")
 	for c := 0; c < m.cols; c++ {
 		fmt.Print("---+")
@@ -98,7 +87,7 @@ func (m *RectangularMaze) Print() {
 	}
 }
 
-func (m *RectangularMaze) ToImage() image.Image {
+func (m *Maze) ToImage() image.Image {
 	const cellSize = 20
 
 	font, err := truetype.Parse(goregular.TTF)
@@ -114,7 +103,7 @@ func (m *RectangularMaze) ToImage() image.Image {
 	dc.Fill()
 
 	dc.SetFontFace(truetype.NewFace(font, &truetype.Options{Size: 80}))
-	dc.SetRGBA(0, 0, 0, 0.25)
+	dc.SetRGBA(0, 0, 0, 0.1)
 	dc.DrawStringAnchored(m.name, float64(dc.Width())/2, float64(dc.Height())/2, 0.5, 0.5)
 
 	dc.SetRGBA(0, 0, 0, 1)
@@ -162,7 +151,7 @@ func (m *RectangularMaze) ToImage() image.Image {
 	return dc.Image()
 }
 
-func (m *RectangularMaze) FindBestExitPoint() {
+func (m *Maze) FindBestExitPoint() {
 	path, _ := graph.ShortestPath(m.g, CellHash(m.start), CellHash(m.end))
 	best := len(path)
 	for r := 0; r < m.rows; r++ {
@@ -172,69 +161,6 @@ func (m *RectangularMaze) FindBestExitPoint() {
 			if newLen > best {
 				m.start = Cell{row: r, col: c}
 				best = newLen
-			}
-		}
-	}
-}
-
-func (m *RectangularMaze) ApplyBinaryTree() {
-	m.name = "Binary Tree"
-	for r := 0; r < m.rows; r++ {
-		for c := 0; c < m.cols; c++ {
-			// Pick between linking vertically or horizontally.
-			rnd := rand.Intn(2)
-			if r+1 == m.rows && c+1 == m.cols {
-				// Neither will work.
-				rnd = -1
-			} else if r+1 == m.rows {
-				// Linking rows won't work, so use columns.
-				rnd = 1
-			} else if c+1 == m.cols {
-				// Linking columns won't work, so use rows.
-				rnd = 0
-			}
-			switch rnd {
-			case 0:
-				// Link to next row.
-				m.g.AddEdge(
-					CellHash(Cell{row: r, col: c}),
-					CellHash(Cell{row: r + 1, col: c}),
-				)
-			case 1:
-				// Link to next column.
-				m.g.AddEdge(
-					CellHash(Cell{row: r, col: c}),
-					CellHash(Cell{row: r, col: c + 1}),
-				)
-			}
-		}
-	}
-}
-
-func (m *RectangularMaze) ApplySideWinder() {
-	m.name = "Sidewinder"
-	for r := 0; r < m.rows; r++ {
-		var run []Cell
-		for c := 0; c < m.cols; c++ {
-			run = append(run, Cell{row: r, col: c})
-
-			shouldCloseOut := c+1 == m.cols || (rand.Intn(2) == 0 && r+1 != m.rows)
-
-			if shouldCloseOut {
-				// Pick a random entry from the run.
-				src := run[rand.Intn(len(run))]
-				// Link to the next row from the random cell.
-				m.g.AddEdge(
-					CellHash(src),
-					CellHash(Cell{row: src.row + 1, col: src.col}),
-				)
-				run = nil
-			} else {
-				// Link to next column.
-				m.g.AddEdge(
-					CellHash(Cell{row: r, col: c}),
-					CellHash(Cell{row: r, col: c + 1}),
-				)
 			}
 		}
 	}

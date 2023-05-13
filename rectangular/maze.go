@@ -85,6 +85,22 @@ func (m *Maze) IsConnected(src, dst cell) bool {
 	return err == nil
 }
 
+func (m *Maze) HasConnection(c cell) bool {
+	if m.IsConnected(c, c.North()) {
+		return true
+	}
+	if m.IsConnected(c, c.East()) {
+		return true
+	}
+	if m.IsConnected(c, c.South()) {
+		return true
+	}
+	if m.IsConnected(c, c.West()) {
+		return true
+	}
+	return false
+}
+
 func (m *Maze) Print() {
 	fmt.Print("+")
 	for c := 0; c < m.cols; c++ {

@@ -7,7 +7,7 @@ else ifeq ($(UNAME_S),Linux)
 	LDFLAGS = -s -lGLU -lGL -lX11
 endif
 
-maze : main.c third_party/tigr/tigr.c
+maze : main.c cell.c third_party/tigr/tigr.c
 	gcc $^ -Os -o $@ $(CFLAGS) $(LDFLAGS)
 
 clean :

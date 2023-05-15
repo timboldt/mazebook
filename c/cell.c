@@ -1,8 +1,8 @@
 #include "cell.h"
 
-uint32_t cell_hash(Cell cell) {
-    uint32_t retval = ((uint32_t)cell.y) & 0x0000FFFF;
-    retval |= ((uint32_t)cell.x) << 16;
+CellHash cell_hash(Cell cell) {
+    CellHash retval = ((CellHash)cell.y) & 0x0000FFFF;
+    retval |= ((CellHash)cell.x) << 16;
     return retval;
 }
 

@@ -9,8 +9,10 @@ typedef struct {
     int16_t y;
 } Cell;
 
+typedef uint32_t CellHash;
+
 // Returns a hash of the cell.
-uint32_t cell_hash(Cell cell);
+CellHash cell_hash(Cell cell);
 
 // Returns the neighboring cell in the specified direction.
 Cell north_of(Cell cell);

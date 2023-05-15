@@ -1,9 +1,5 @@
 #include "edge.h"
 
-#include <assert.h>
-
-#include "cell.h"
-
 Edge new_edge(Cell cell1, Cell cell2) {
     uint32_t h1 = cell_hash(cell1);
     uint32_t h2 = cell_hash(cell2);
@@ -28,7 +24,7 @@ Edge new_edge(Cell cell1, Cell cell2) {
     };
 }
 
-uint64_t edge_hash(Edge edge) {
-    uint64_t retval = ((uint64_t)edge.src_cell_hash) << 32;
-    return retval | (uint64_t)edge.dst_cell_hash;
+EdgeHash edge_hash(Edge edge) {
+    EdgeHash retval = ((EdgeHash)edge.src_cell_hash) << 32;
+    return retval | (EdgeHash)edge.dst_cell_hash;
 }

@@ -7,6 +7,7 @@ else ifeq ($(UNAME_S),Linux)
 	LDFLAGS = -s -lGLU -lGL -lX11
 endif
 
+.PHONY: all clean tests maze
 all: maze tests
 
 clean:
@@ -16,7 +17,7 @@ tests: build/celltest build/edgetest
 
 maze: build/maze
 
-build/maze: main.c cell.c edge.c third_party/tigr/tigr.c
+build/maze: main.c cell.c edge.c maze.c third_party/tigr/tigr.c
 	mkdir -p build
 	gcc $^ -Os -o $@ $(CFLAGS) $(LDFLAGS)
 

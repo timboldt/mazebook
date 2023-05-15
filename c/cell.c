@@ -1,7 +1,8 @@
 #include "cell.h"
 
-int hash(Cell cell) {
-    int retval = (int)cell.x * 1000 + cell.y;
+uint32_t cell_hash(Cell cell) {
+    uint32_t retval = ((uint32_t)cell.y) & 0x0000FFFF;
+    retval |= ((uint32_t)cell.x) << 16;
     return retval;
 }
 

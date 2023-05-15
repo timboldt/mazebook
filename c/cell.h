@@ -2,13 +2,15 @@
 
 #include <stdint.h>
 
+// A Cell represents a location in the Maze. It can also be thought of as a node
+// in a graph.
 typedef struct {
     int16_t x;
     int16_t y;
 } Cell;
 
 // Returns a hash of the cell.
-int hash(Cell cell);
+uint32_t cell_hash(Cell cell);
 
 // Returns the neighboring cell in the specified direction.
 Cell north_of(Cell cell);

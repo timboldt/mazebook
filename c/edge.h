@@ -14,4 +14,4 @@ typedef struct {
 Edge new_edge(Cell cell1, Cell cell2);
 
 // Returns a hash of the Edge.
-uint64_t hash(Edge edge);
+uint64_t edge_hash(Edge edge);

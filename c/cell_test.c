@@ -12,11 +12,9 @@ void tearDown(void) {
     // clean stuff up here
 }
 
-bool cells_equal(Cell c1, Cell c2) {
-    return c1.x == c2.x && c1.y == c2.y;
-}
+bool cells_equal(Cell c1, Cell c2) { return c1.x == c2.x && c1.y == c2.y; }
 
-void test_CellHashWorks(void) {
+void test_EdgeCreationWorks(void) {
     Cell c;
 
     c = (Cell){
@@ -38,7 +36,7 @@ void test_CellHashWorks(void) {
     TEST_ASSERT_EQUAL_HEX32(0xFFFF0001, cell_hash(c));
 }
 
-void test_DirectionsWork(void) {
+void test_EdgeHashWorks(void) {
     Cell c;
     Cell c2;
 
@@ -72,7 +70,7 @@ void test_DirectionsWork(void) {
         .x = 42,
         .y = 6,
     };
-    
+
     c2 = (Cell){
         .x = 42,
         .y = 7,
@@ -98,7 +96,7 @@ void test_DirectionsWork(void) {
 // not needed when using generate_test_runner.rb
 int main(void) {
     UNITY_BEGIN();
-    RUN_TEST(test_CellHashWorks);
-    RUN_TEST(test_DirectionsWork);
+    RUN_TEST(test_EdgeCreationWorks);
+    RUN_TEST(test_EdgeHashWorks);
     return UNITY_END();
 }

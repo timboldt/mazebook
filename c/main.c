@@ -6,7 +6,7 @@
 int main(int argc, char **argv) {
     Maze mz;
     maze_init(&mz, "Test", 50, 30);
-    
+
     printf("Maze:\n");
     printf("  Name:      %s\n", mz.name);
     printf("  Width:     %d\n", mz.width);
@@ -15,6 +15,10 @@ int main(int argc, char **argv) {
     printf("  Entrance:  (%d, %d)\n", mz.entrance.x, mz.entrance.y);
     printf("  Exit:      (%d, %d)\n", mz.exit.x, mz.exit.y);
 
-    printf("  cell_set[42]: %08x\n", mz.cell_set[42]);
-    printf("  edge_set[42]: %016llx\n", mz.edge_set[42]);
+    printf("  HasCell (42, 10): %d\n",
+           maze_has_cell(&mz, (Cell){.x = 42, .y = 10}));
+    maze_add_edge(&mz, (Cell){.x = 42, .y = 10}, (Cell){.x = 42, .y = 11});
+    printf(
+        "  HasEdge (42, 10)<->(42, 11): %d\n",
+        maze_has_edge(&mz, (Cell){.x = 42, .y = 10}, (Cell){.x = 42, .y = 11}));
 }

@@ -21,4 +21,6 @@ int main(int argc, char **argv) {
     printf(
         "  HasEdge (42, 10)<->(42, 11): %d\n",
         maze_has_edge(&mz, (Cell){.x = 42, .y = 10}, (Cell){.x = 42, .y = 11}));
+
+    maze_print_console(&mz);
 }

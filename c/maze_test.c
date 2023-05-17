@@ -30,8 +30,10 @@ void test_MazeInitWorks(void) {
         .y = 0,
     };
     TEST_ASSERT_EQUAL_MEMORY(&c2, &mz.exit, sizeof(Cell));
-    TEST_ASSERT_EQUAL_HEX32(0x00000000, mz.cell_set[0]);  // Because cell(0,0) is valid.
-    TEST_ASSERT_EQUAL_HEX64(0xDFDFDFDFDFDFDFDF, mz.edge_set[0]);  // Because no edge is valid yet.
+    TEST_ASSERT_EQUAL_HEX32(0x00000000,
+                            mz.cell_set[0]);  // Because cell(0,0) is valid.
+    TEST_ASSERT_EQUAL_HEX64(0xDFDFDFDFDFDFDFDF,
+                            mz.edge_set[0]);  // Because no edge is valid yet.
 }
 
 void test_MazeNameBufferOverrun(void) {
@@ -53,18 +55,18 @@ void test_MazeTooBig(void) {
 void test_MazeCells(void) {
     Maze mz;
     maze_init(&mz, "test", 42, 33);
-    TEST_ASSERT_TRUE(maze_has_cell(&mz, (Cell){.x = 0, .y=0}));
-    TEST_ASSERT_FALSE(maze_has_cell(&mz, (Cell){.x = -1, .y=-1}));
-    TEST_ASSERT_FALSE(maze_has_cell(&mz, (Cell){.x = 42, .y=33}));
-    maze_add_cell(&mz, (Cell){.x = 42, .y=33});
-    TEST_ASSERT_FALSE(maze_has_cell(&mz, (Cell){.x = 42, .y=33}));
+    TEST_ASSERT_TRUE(maze_has_cell(&mz, (Cell){.x = 0, .y = 0}));
+    TEST_ASSERT_FALSE(maze_has_cell(&mz, (Cell){.x = -1, .y = -1}));
+    TEST_ASSERT_FALSE(maze_has_cell(&mz, (Cell){.x = 42, .y = 33}));
+    maze_add_cell(&mz, (Cell){.x = 42, .y = 33});
+    TEST_ASSERT_FALSE(maze_has_cell(&mz, (Cell){.x = 42, .y = 33}));
 }
 
 void test_MazeEdges(void) {
     Maze mz;
     maze_init(&mz, "test", 42, 33);
-    Cell cell1 = {.x = 2, .y=3};
-    Cell cell2 = {.x = 2, .y=4};
+    Cell cell1 = {.x = 2, .y = 3};
+    Cell cell2 = {.x = 2, .y = 4};
     TEST_ASSERT_FALSE(maze_has_edge(&mz, cell1, cell2));
     TEST_ASSERT_FALSE(maze_has_edge(&mz, cell2, cell1));
     TEST_ASSERT_FALSE(maze_cell_has_connections(&mz, cell1));

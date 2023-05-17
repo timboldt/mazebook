@@ -2,6 +2,7 @@
 
 #include <memory.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <string.h>
 
 #define INVALID_CELL_HASH 0xDFDFDFDF
@@ -9,8 +10,7 @@
 
 void maze_init(Maze *maze, const char *name, int16_t width, int16_t height) {
     bool too_big = ((int)width * (int)height > MAX_CELLS);
-    if (width < 1 || height < 1 ||
-        too_big) {
+    if (width < 1 || height < 1 || too_big) {
         // Try to return something usable, but noticably wrong.
         width = 10;
         height = 10;
@@ -124,47 +124,70 @@ bool maze_has_edge(const Maze *maze, Cell cell1, Cell cell2) {
     return maze->edge_set[_find_edge(maze, hash)] == hash;
 }
 
-/*
-void maze_print_console(Maze *maze) {
-    fmt.Print("+")
-    for c := 0; c < m.cols; c++ {
-        fmt.Print("---+")
+void maze_print_console(const Maze *maze) {
+    putchar('+');
+    for (int x = 0; x < maze->width; x++) {
+        printf("---+");
     }
-    fmt.Println()
+    putchar('\n');
 
-    for r := 0; r < m.rows; r++ {
-        middle := "|"
-        bottom := "+"
-        for c := 0; c < m.cols; c++ {
-            thisCell := Cell(r, c)
+    for (int y = maze->height - 1; y >= 0; y--) {
+        size_t idx = 0;
+        char middle[300];
+        char bottom[300];
+
+        middle[idx] = '|';
+        bottom[idx] = '+';
+        idx++;
+
+        for (int x = 0; x < maze->width; x++) {
+            Cell cell = {.x = x, .y = y};
+
+            if (idx >= sizeof(middle) - 6) {
+                // Maze is too wide to display.
+                middle[idx] = '?';
+                bottom[idx] = '?';
+                idx++;
+                break;
+            }
 
             // Contents of cell.
-            if thisCell.Hash() == m.start.Hash() {
-                middle += " S "
-            } else if thisCell.Hash() == m.end.Hash() {
-                middle += " E "
+            middle[idx] = ' ';
+            if (cell_hash(cell) == cell_hash(maze->entrance)) {
+                middle[idx + 1] = 'S';
+            } else if (cell_hash(cell) == cell_hash(maze->exit)) {
+                middle[idx + 1] = 'E';
             } else {
-                middle += "   "
+                middle[idx + 1] = ' ';
             }
+            middle[idx + 2] = ' ';
             // Right wall of cell.
-            if m.IsConnected(thisCell, thisCell.East()) {
-                middle += " "
+            if (maze_has_edge(maze, cell, east_of(cell))) {
+                middle[idx + 3] = ' ';
             } else {
-                middle += "|"
+                middle[idx + 3] = '|';
             }
             // Bottom wall of cell.
-            if m.IsConnected(thisCell, thisCell.South()) {
-                bottom += "   "
+            if (maze_has_edge(maze, cell, south_of(cell))) {
+                bottom[idx] = ' ';
+                bottom[idx + 1] = ' ';
+                bottom[idx + 2] = ' ';
             } else {
-                bottom += "---"
+                bottom[idx] = '-';
+                bottom[idx + 1] = '-';
+                bottom[idx + 2] = '-';
             }
-            bottom += "+"
+            bottom[idx + 3] = '+';
+            idx += 4;
         }
-        fmt.Println(middle)
-        fmt.Println(bottom)
+        middle[idx] = '\0';
+        bottom[idx] = '\0';
+        printf("%s\n", middle);
+        printf("%s\n", bottom);
     }
 }
 
+/*
 void maze_save_png(Maze *maze, const char *filename) {
     const cellSize = 20
 

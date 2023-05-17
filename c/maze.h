@@ -1,12 +1,12 @@
 #pragma once
 
+#include <stdbool.h>
+
 #include "cell.h"
 #include "edge.h"
 
-#include <stdbool.h>
-
 #define MAX_CELLS 2048
-#define MAX_EDGES (MAX_CELLS*2)
+#define MAX_EDGES (MAX_CELLS * 2)
 
 typedef struct {
     char name[80];

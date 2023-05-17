@@ -9,10 +9,11 @@
 
 void maze_init(Maze *maze, const char *name, int16_t width, int16_t height) {
     bool too_big = ((int)width * (int)height > MAX_CELLS);
-    if (strlen(name) > sizeof(maze->name) - 1 || width < 1 || height < 1 ||
+    if (width < 1 || height < 1 ||
         too_big) {
-        memset(maze, 0, sizeof(*maze));
-        return;
+        // Try to return something usable, but noticably wrong.
+        width = 10;
+        height = 10;
     }
 
     strncpy(maze->name, name, sizeof(maze->name));
@@ -61,6 +62,12 @@ static size_t _find_cell(const Maze *maze, CellHash hash) {
 }
 
 void maze_add_cell(Maze *maze, Cell cell) {
+    if (cell.x < 0 || cell.y < 0) {
+        return;
+    }
+    if (cell.x >= maze->width || cell.y >= maze->height) {
+        return;
+    }
     CellHash hash = cell_hash(cell);
     maze->cell_set[_find_cell(maze, hash)] = hash;
 }
@@ -113,11 +120,7 @@ void maze_add_edge(Maze *maze, Cell cell1, Cell cell2) {
 }
 
 bool maze_has_edge(const Maze *maze, Cell cell1, Cell cell2) {
-    Edge edge = {
-        .src_cell_hash = cell_hash(cell1),
-        .dst_cell_hash = cell_hash(cell2),
-    };
-    EdgeHash hash = edge_hash(edge);
+    EdgeHash hash = edge_hash(new_edge(cell1, cell2));
     return maze->edge_set[_find_edge(maze, hash)] == hash;
 }
 

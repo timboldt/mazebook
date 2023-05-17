@@ -13,7 +13,7 @@ all: maze tests
 clean:
 	rm -rf build
 
-tests: build/celltest build/edgetest
+tests: build/celltest build/edgetest build/mazetest
 
 maze: build/maze
 
@@ -27,6 +27,11 @@ build/celltest: cell_test.c cell.c third_party/unity/src/unity.c
 	./$@
 
 build/edgetest: edge_test.c edge.c cell.c third_party/unity/src/unity.c
+	mkdir -p build
+	gcc $^ -Os -o $@ $(CFLAGS) $(LDFLAGS)
+	./$@
+
+build/mazetest: maze_test.c maze.c edge.c cell.c third_party/unity/src/unity.c
 	mkdir -p build
 	gcc $^ -Os -o $@ $(CFLAGS) $(LDFLAGS)
 	./$@

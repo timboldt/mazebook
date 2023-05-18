@@ -17,7 +17,7 @@ tests: build/celltest build/edgetest build/mazetest
 
 maze: build/maze
 
-build/maze: main.c cell.c edge.c maze.c third_party/tigr/tigr.c
+build/maze: main.c cell.c edge.c maze.c algo/binary_tree.c third_party/tigr/tigr.c
 	mkdir -p build
 	gcc $^ -Os -o $@ $(CFLAGS) $(LDFLAGS)
 

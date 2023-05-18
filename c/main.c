@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "algo/binary_tree.h"
+#include "algo/sidewinder.h"
 #include "maze.h"
 #include "tigr.h"
 
@@ -19,8 +20,8 @@ int main(int argc, char **argv) {
     printf("  HasCell (42, 10): %d\n",
            maze_has_cell(&mz, (Cell){.x = 42, .y = 10}));
 
-    apply_binary_tree(&mz);
-    
+    apply_sidewinder(&mz);
+
     printf(
         "  HasEdge (42, 10)<->(42, 11): %d\n",
         maze_has_edge(&mz, (Cell){.x = 42, .y = 10}, (Cell){.x = 42, .y = 11}));

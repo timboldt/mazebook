@@ -5,8 +5,8 @@
 #include "cell.h"
 #include "edge.h"
 
-#define MAX_CELLS 2048
-#define MAX_EDGES (MAX_CELLS * 2)
+#define MAX_CELLS 3989
+#define MAX_EDGES 7993
 
 typedef struct {
     char name[80];

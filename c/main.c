@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include "algo/aldous_broder.h"
 #include "algo/binary_tree.h"
 #include "algo/sidewinder.h"
 #include "maze.h"
@@ -20,7 +21,7 @@ int main(int argc, char **argv) {
     printf("  HasCell (42, 10): %d\n",
            maze_has_cell(&mz, (Cell){.x = 42, .y = 10}));
 
-    apply_sidewinder(&mz);
+    apply_aldous_broder(&mz);
 
     printf(
         "  HasEdge (42, 10)<->(42, 11): %d\n",

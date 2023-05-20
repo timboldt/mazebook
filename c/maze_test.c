@@ -78,6 +78,30 @@ void test_MazeEdges(void) {
     TEST_ASSERT_TRUE(maze_cell_has_connections(&mz, cell2));
 }
 
+void test_MazeConnections(void) {
+    Maze mz;
+    maze_init(&mz, "test", 3, 3);
+    for (int x = 0; x < 3; x++) {
+        for (int y = 0; y < 3; y++) {
+            TEST_ASSERT_FALSE(maze_cell_has_connections(&mz, (Cell){.x = x, .y = y}));
+        }
+    }
+    Cell cell = {.x = 1, .y = 1};
+    maze_add_edge(&mz, cell, north_of(cell));
+    maze_add_edge(&mz, cell, east_of(cell));
+    maze_add_edge(&mz, cell, south_of(cell));
+    maze_add_edge(&mz, cell, west_of(cell));
+    TEST_ASSERT_FALSE(maze_cell_has_connections(&mz, (Cell){.x = 0, .y = 0}));
+    TEST_ASSERT_TRUE(maze_cell_has_connections(&mz, (Cell){.x = 1, .y = 0}));
+    TEST_ASSERT_FALSE(maze_cell_has_connections(&mz, (Cell){.x = 2, .y = 0}));
+    TEST_ASSERT_TRUE(maze_cell_has_connections(&mz, (Cell){.x = 0, .y = 1}));
+    TEST_ASSERT_TRUE(maze_cell_has_connections(&mz, (Cell){.x = 1, .y = 1}));
+    TEST_ASSERT_TRUE(maze_cell_has_connections(&mz, (Cell){.x = 2, .y = 1}));
+    TEST_ASSERT_FALSE(maze_cell_has_connections(&mz, (Cell){.x = 0, .y = 2}));
+    TEST_ASSERT_TRUE(maze_cell_has_connections(&mz, (Cell){.x = 1, .y = 2}));
+    TEST_ASSERT_FALSE(maze_cell_has_connections(&mz, (Cell){.x = 2, .y = 2}));
+}
+
 // not needed when using generate_test_runner.rb
 int main(void) {
     UNITY_BEGIN();
@@ -86,5 +110,6 @@ int main(void) {
     RUN_TEST(test_MazeTooBig);
     RUN_TEST(test_MazeCells);
     RUN_TEST(test_MazeEdges);
+    RUN_TEST(test_MazeConnections);
     return UNITY_END();
 }

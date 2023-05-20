@@ -111,11 +111,7 @@ static size_t _find_edge(const Maze *maze, EdgeHash hash) {
 }
 
 void maze_add_edge(Maze *maze, Cell cell1, Cell cell2) {
-    Edge edge = {
-        .src_cell_hash = cell_hash(cell1),
-        .dst_cell_hash = cell_hash(cell2),
-    };
-    EdgeHash hash = edge_hash(edge);
+    EdgeHash hash = edge_hash(new_edge(cell1, cell2));
     maze->edge_set[_find_edge(maze, hash)] = hash;
 }
 

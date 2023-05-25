@@ -1,5 +1,7 @@
 #include "cell.h"
 
+Cell new_cell(int x, int y) { return (Cell){.x = x, .y = y}; }
+
 CellHash cell_hash(Cell cell) {
     CellHash retval = ((CellHash)cell.y) & 0x0000FFFF;
     retval |= ((CellHash)cell.x) << 16;

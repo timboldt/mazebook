@@ -11,6 +11,9 @@ typedef struct {
 
 typedef uint32_t CellHash;
 
+// Constructs a cell.
+Cell new_cell(int x, int y);
+
 // Returns a hash of the cell.
 CellHash cell_hash(Cell cell);
 

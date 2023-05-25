@@ -183,93 +183,52 @@ void maze_print_console(const Maze *maze) {
     }
 }
 
-/*
-void maze_save_png(Maze *maze, const char *filename) {
-    const cellSize = 20
-
-    font, err := truetype.Parse(goregular.TTF)
-    if err != nil {
-        log.Fatal(err)
+int _path_length(Maze *maze, Cell prev, Cell curr, Cell end) {
+    if (cell_hash(curr) == cell_hash(end)) {
+        return 0;
     }
-
-    dc := gg.NewContext(m.cols*cellSize, m.rows*cellSize)
-
-    // Set background.
-    dc.SetRGBA(1, 1, 1, 1)
-    dc.DrawRectangle(0, 0, float64(dc.Width()), float64(dc.Height()))
-    dc.Fill()
-
-    // Watermark with maze algorithm.
-    dc.SetFontFace(truetype.NewFace(font, &truetype.Options{Size: 80}))
-    dc.SetRGBA(0, 0, 0, 0.1)
-    dc.DrawStringAnchored(m.name, float64(dc.Width())/2, float64(dc.Height())/2,
-0.5, 0.5)
-
-    // Set up line format.
-    dc.SetRGBA(0, 0, 0, 1)
-    dc.SetLineCap(gg.LineCapRound)
-    dc.SetLineWidth(5)
-
-    // Top border.
-    dc.DrawLine(0, 0, float64(dc.Width()), 0)
-    dc.Stroke()
-
-    // Left border.
-    dc.DrawLine(0, 0, 0, float64(dc.Height()))
-    dc.Stroke()
-
-    for r := 0; r < m.rows; r++ {
-        for c := 0; c < m.cols; c++ {
-            cellLeft := float64(c * cellSize)
-            cellTop := float64(r * cellSize)
-            thisCell := Cell(r, c)
-
-            // Draw start and end symbols.
-            if r == m.start.row && c == m.start.col {
-                dc.SetRGBA(0, 0.5, 0, 0.5)
-                dc.DrawCircle(cellLeft+0.5*cellSize, cellTop+0.5*cellSize,
-cellSize*0.35) dc.Fill() dc.SetRGBA(0, 0, 0, 1)
-                dc.SetFontFace(truetype.NewFace(font, &truetype.Options{Size:
-6})) dc.DrawStringAnchored("Start", cellLeft+0.5*cellSize, cellTop+0.5*cellSize,
-0.5, 0.5) } else if r == m.end.row && c == m.end.col { dc.SetRGBA(0.5, 0, 0.5,
-0.5) dc.DrawCircle(cellLeft+0.5*cellSize, cellTop+0.5*cellSize, cellSize*0.35)
-                dc.Fill()
-                dc.SetRGBA(0, 0, 0, 1)
-                dc.SetFontFace(truetype.NewFace(font, &truetype.Options{Size:
-6})) dc.DrawStringAnchored("End", cellLeft+0.5*cellSize, cellTop+0.5*cellSize,
-0.5, 0.5)
-            }
-
-            // Restore line color and draw right and bottom sides of cell, as
-required. dc.SetRGBA(0, 0, 0, 1) if !m.IsConnected(thisCell, thisCell.East()) {
-                dc.DrawLine(float64((c+1)*cellSize), float64(r*cellSize)+1,
-float64((c+1)*cellSize), float64((r+1)*cellSize)-1) dc.Stroke()
-            }
-            if !m.IsConnected(thisCell, thisCell.South()) {
-                dc.DrawLine(float64(c*cellSize)+1, float64((r+1)*cellSize),
-float64((c+1)*cellSize)-1, float64((r+1)*cellSize)) dc.Stroke()
+    int best_path = 9999;
+    for (int i = 0; i < 4; i++) {
+        Cell next;
+        switch (i) {
+            case 0:
+                next = north_of(curr);
+                break;
+            case 1:
+                next = east_of(curr);
+                break;
+            case 2:
+                next = south_of(curr);
+                break;
+            case 3:
+                next = west_of(curr);
+                break;
+        }
+        // If we are connected to the next cell and it is not the cell we came
+        // from, consider it as a candidate.
+        if (maze_has_edge(maze, curr, next) &&
+            cell_hash(next) != cell_hash(prev)) {
+            int plen = _path_length(maze, curr, next, end);
+            if (plen < best_path) {
+                best_path = plen;
             }
         }
     }
-
-    return dc.Image()
+    return best_path + 1;
 }
 
-// NOTE: This is horribly inefficient. Consider redoing it as a full walk
-// of the maze rather than recomputing the full path for each cell.
-func (m *Maze) FindBestExitPoint() {
-    path, _ := graph.ShortestPath(m.g, m.start.Hash(), m.end.Hash())
-    best := len(path)
-    for r := 0; r < m.rows; r++ {
-        for c := 0; c < m.cols; c++ {
-            thisCell := Cell(r, c)
-            path, _ = graph.ShortestPath(m.g, thisCell.Hash(), m.end.Hash())
-            newLen := len(path)
-            if newLen > best {
-                m.start = thisCell
-                best = newLen
+void maze_update_entrance(Maze *maze) {
+    int longest = 0;
+    for (int y1 = 0; y1 < maze->height; y1++) {
+        for (int y2 = 0; y2 < maze->height; y2++) {
+            Cell start = new_cell(0, y1);
+            Cell end = new_cell(maze->width - 1, y2);
+            int len = _path_length(maze, start, start, end);
+            if (len > longest) {
+                maze->entrance = start;
+                maze->exit = end;
+                longest = len;
             }
         }
     }
 }
-*/

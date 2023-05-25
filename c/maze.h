@@ -33,4 +33,4 @@ bool maze_has_edge(const Maze *maze, Cell cell1, Cell cell2);
 void maze_print_console(const Maze *maze);
 void maze_save_png(const Maze *maze, const char *filename);
 
-void maze_adjust_start_point(Maze *maze);
+void maze_update_entrance(Maze *maze);

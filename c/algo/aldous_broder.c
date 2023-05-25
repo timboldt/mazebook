@@ -1,8 +1,5 @@
 #include "aldous_broder.h"
 
-//xxxxxxxxxxx
-#include <stdio.h>
-
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -37,7 +34,6 @@ void apply_aldous_broder(Maze *maze) {
             if (!maze_cell_has_connections(maze, next)) {
                 maze_add_edge(maze, c, next);
                 unvisited--;
-                printf("%05d [%d]: %d %d\n", unvisited, maze_cell_has_connections(maze, next), next.x, next.y);
             }
             c = next;
         }

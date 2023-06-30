@@ -1,7 +1,7 @@
 use crate::maze::Cell;
 
 // An Edge represents a bi-directional connection between two Cells in a Maze.
-#[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Edge {
     c1: Cell,
     c2: Cell,

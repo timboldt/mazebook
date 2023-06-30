@@ -1,6 +1,6 @@
 // A Cell represents a location in the Maze. It can also be thought of as a node
 // in a graph.
-#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Cell {
     pub x: i16,
     pub y: i16,

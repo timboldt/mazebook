@@ -3,7 +3,6 @@ use std::collections::HashSet;
 use super::Cell;
 use super::Edge;
 
-#[allow(dead_code)]
 pub struct Maze {
     name: String,
     width: i16,
@@ -65,7 +64,6 @@ impl Maze {
         }
     }
 
-    #[allow(dead_code)]
     pub fn has_cell(&self, c: &Cell) -> bool {
         self.cells.contains(c)
     }
@@ -77,7 +75,6 @@ impl Maze {
             || self.has_edge(c, c.west())
     }
 
-    #[allow(dead_code)]
     pub fn add_edge(&mut self, c1: Cell, c2: Cell) {
         if self.has_cell(&c1) && self.has_cell(&c2) {
             self.edges.insert(Edge::new(c1, c2));

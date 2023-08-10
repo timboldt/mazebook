@@ -51,6 +51,14 @@ impl Maze {
         self.height
     }
 
+    pub fn entrance(&self) -> Cell {
+        self.entrance
+    }
+
+    pub fn exit(&self) -> Cell {
+        self.exit
+    }
+
     pub fn add_cell(&mut self, c: Cell) {
         if c.x >= 0 && c.x < self.width && c.y >= 0 && c.y < self.height {
             self.cells.insert(c);
@@ -80,41 +88,48 @@ impl Maze {
         self.edges.contains(&Edge::new(c1, c2))
     }
 
-    pub fn print_to_console(&self) {
-        print!("+");
-        for _ in 0..self.width {
-            print!("---+");
+    fn path_length(&self, prev: Cell, curr: Cell, end: Cell) -> i32 {
+        if curr == end {
+            return 0;
         }
-        println!();
-
-        // Note: `y` grows from bottom to top, so we need to go in reverse.
-        for y in (0..self.height).rev() {
-            let mut middle = "|".to_string();
-            let mut bottom = "+".to_string();
-            for x in 0..self.width {
-                let this_cell = Cell { x, y };
-                if this_cell == self.entrance {
-                    middle.push_str(" S ");
-                } else if this_cell == self.exit {
-                    middle.push_str(" E ");
-                } else {
-                    middle.push_str("   ");
-                }
-                if self.has_edge(this_cell, this_cell.east()) {
-                    middle.push(' ');
-                } else {
-                    middle.push('|');
-                }
-                if self.has_edge(this_cell, this_cell.south()) {
-                    bottom.push_str("   +");
-                } else {
-                    bottom.push_str("---+");
+        let mut best = 9999;
+        for dir in 0..4 {
+            let next = match dir {
+                0 => curr.north(),
+                1 => curr.east(),
+                2 => curr.south(),
+                _ => curr.west(),
+            };
+            // If we are connected to the next cell and it is not the cell we came
+            // from, consider it as a candidate.
+            if self.has_edge(curr, next) && next != prev {
+                let len = self.path_length(curr, next, end);
+                if len < best {
+                    best = len;
                 }
             }
-            println!("{}", middle);
-            println!("{}", bottom);
+        }
+        best + 1
+    }
+
+    pub fn maze_update_entrance(&mut self) {
+        let mut longest = 0;
+        // Find the entrance along the left, searching from top to bottom.
+        for y1 in (0..self.height).rev() {
+            // Find the exit along the right, searching from bottom to top.
+            for y2 in 0..self.height {
+                let start = Cell { x: 0, y: y1 };
+                let end = Cell {
+                    x: self.width - 1,
+                    y: y2,
+                };
+                let len = self.path_length(start, start, end);
+                if len > longest {
+                    self.entrance = start;
+                    self.exit = end;
+                    longest = len;
+                }
+            }
         }
     }
-    // void maze_save_png(const Maze *maze, const char *filename);
-    // void maze_update_entrance(Maze *maze);
 }

@@ -39,6 +39,18 @@ impl Maze {
         m
     }
 
+    pub fn set_name(&mut self, name: &str) {
+        self.name = name.to_string();
+    }
+
+    pub fn width(&self) -> i16 {
+        self.width
+    }
+
+    pub fn height(&self) -> i16 {
+        self.height
+    }
+
     pub fn add_cell(&mut self, c: Cell) {
         if c.x >= 0 && c.x < self.width && c.y >= 0 && c.y < self.height {
             self.cells.insert(c);

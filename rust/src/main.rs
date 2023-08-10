@@ -1,7 +1,7 @@
 mod rectangular_maze;
 
 fn main() {
-    let m = rectangular_maze::Maze::new("test", 20, 20);
-    println!("maze info: {:?}", m.cell_has_connections(rectangular_maze::Cell { x: 6, y: 6 }));
+    let mut m = rectangular_maze::Maze::new("test", 20, 20);
+    rectangular_maze::apply_aldous_broder(&mut m);
     m.print_to_console();
 }
